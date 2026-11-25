@@ -1,0 +1,142 @@
+/* ==========================================================================
+   variables.css — design tokens (modern Reddit / "shreddit" look)
+   Import order: variables.css -> global.css -> layout.css
+   Dark mode: set data-theme="dark" on <html>.
+   ========================================================================== */
+
+:root {
+  /* ---------- Brand ---------- */
+  --color-brand: #ff4500;            /* Reddit orange (logo, accents) */
+  --color-brand-strong: #d93900;     /* Primary buttons ("Log In", "Join") */
+  --color-brand-strong-hover: #ae2c00;
+  --color-upvote: #d93900;
+  --color-upvote-bg: #ffe3d9;
+  --color-downvote: #6a5cff;
+  --color-downvote-bg: #e8e5ff;
+  --color-link: #0045ac;
+  --color-logo-text: #ff4500;        /* "reddit" wordmark (white in dark mode) */
+
+  /* ---------- Neutrals (light) ---------- */
+  --color-bg: #ffffff;               /* page background */
+  --color-surface: #ffffff;          /* cards, navbar, sidebar */
+  --color-surface-weak: #f6f8f9;     /* right-rail cards, subtle panels */
+  --color-surface-raised: #ffffff;   /* dropdowns, popovers, modals */
+  --color-surface-input: #e5ebee;    /* search bar, inputs */
+  --color-hover: #e2e7e9;            /* hover on nav items / icon buttons */
+  --color-active: #e5ebee;           /* selected sidebar item */
+  --color-secondary-btn: #e5ebee;    /* grey pill buttons (vote, comment, share) */
+  --color-secondary-btn-hover: #d2dadd;
+  --color-toggle-off: #c7d2d6;        /* switch track when off */
+
+  --color-text: #0f1a1c;             /* primary text */
+  --color-text-secondary: #576f76;   /* meta text, section titles */
+  --color-text-weak: #8ba2ad;        /* placeholders */
+  --color-text-on-brand: #ffffff;
+
+  --color-border: #e5ebee;           /* dividers, navbar bottom border */
+  --color-border-strong: #c7d2d6;
+  --color-focus: #0045ac;
+  --color-overlay: rgba(0, 0, 0, 0.5);
+
+  --color-success: #008a10;
+  --color-danger: #d93a00;
+  --color-warning: #b28800;
+
+  /* ---------- Typography ---------- */
+  --font-sans: "Reddit Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --font-size-xs: 0.75rem;   /* 12px — meta, timestamps */
+  --font-size-sm: 0.875rem;  /* 14px — body, nav items */
+  --font-size-md: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px — post title (feed) */
+  --font-size-xl: 1.5rem;    /* 24px — post title (detail page) */
+  --font-size-2xl: 2rem;     /* 32px — community name */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-base: 1.4;
+  --line-height-relaxed: 1.6;
+
+  /* ---------- Spacing (4px scale) ---------- */
+  --space-1: 0.25rem;  /*  4px */
+  --space-2: 0.5rem;   /*  8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+
+  /* ---------- Radius ---------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;   /* cards, post containers */
+  --radius-pill: 999px;
+  --radius-circle: 50%;
+
+  /* ---------- Shadows ---------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+  /* ---------- Layout ---------- */
+  --navbar-height: 56px;
+  --sidebar-width: 272px;
+  --right-rail-width: 316px;
+  --content-max-width: 1120px;   /* feed + right rail */
+  --feed-max-width: 756px;
+  --search-max-width: 560px;
+  --control-height: 40px;        /* search bar, nav items, buttons */
+  --control-height-sm: 32px;
+
+  /* ---------- Motion ---------- */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+
+  /* ---------- Z-index ---------- */
+  --z-sidebar: 50;
+  --z-navbar: 100;
+  --z-overlay: 150;
+  --z-drawer: 200;
+  --z-dropdown: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  color-scheme: light;
+}
+
+/* ---------- Dark theme ---------- */
+[data-theme="dark"] {
+  --color-bg: #0e1113;
+  --color-surface: #0e1113;
+  --color-surface-weak: #04090a;
+  --color-surface-raised: #181c1f;
+  --color-surface-input: #2a3236;
+  --color-hover: #1a282d;
+  --color-active: #2a3236;
+  --color-secondary-btn: #2a3236;
+  --color-secondary-btn-hover: #333d42;
+
+  --color-text: #f2f4f5;
+  --color-text-secondary: #b7cad4;
+  --color-text-weak: #82959b;
+
+  --color-border: #2a3236;
+  --color-border-strong: #3e4a4f;
+  --color-focus: #6ea9ff;
+  --color-link: #6ea9ff;
+  --color-logo-text: #ffffff;
+  --color-overlay: rgba(0, 0, 0, 0.7);
+
+  --color-upvote-bg: #4a1d0e;
+  --color-downvote-bg: #26215c;
+  --color-toggle-off: #546d76;
+
+  color-scheme: dark;
+}

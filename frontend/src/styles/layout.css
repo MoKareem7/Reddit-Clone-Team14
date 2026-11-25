@@ -1,0 +1,541 @@
+/* ==========================================================================
+   layout.css — Navbar, Sidebar, MainLayout and responsive behaviour
+
+   Class contract (BEM). Elements marked (opt) are optional.
+
+   MainLayout.jsx
+     .main-layout
+       <Navbar />
+       .main-layout__body
+         <Sidebar />
+         .main-layout__overlay (opt)     -> mobile drawer backdrop; add --visible
+         main.main-layout__content
+           .page-grid                     -> feed + right rail wrapper (per page)
+             .page-grid__main
+             aside.page-grid__aside      -> community info / recent posts
+
+   Navbar.jsx
+     header.navbar
+       .navbar__left
+         button.navbar__menu-btn         -> hamburger, only shown < 1200px
+         a.navbar__logo > .navbar__logo-icon + .navbar__logo-text
+       form.navbar__search
+         .navbar__search-icon + input.navbar__search-input
+       .navbar__right
+         button.navbar__search-toggle    -> magnifier, only shown < 768px
+         .navbar__icon-btn (create, chat, notifications...)
+           .navbar__badge (opt)          -> notification count
+         .navbar__btn .navbar__btn--primary   -> "Log In"
+         .navbar__btn .navbar__btn--secondary -> "Get App" / "Sign Up"
+         button.navbar__user  > img.navbar__avatar (+ .navbar__user-name opt)
+         .navbar__dropdown (opt)         -> user menu (uses .dropdown__item)
+
+   Sidebar.jsx
+     aside.sidebar  (+ .sidebar--open when the mobile drawer is open)
+       nav.sidebar__nav
+         a.sidebar__item (+ .sidebar__item--active)
+           .sidebar__item-icon + .sidebar__item-label
+         hr.sidebar__divider
+         .sidebar__section (+ .sidebar__section--collapsed)
+           button.sidebar__section-header
+             .sidebar__section-title + .sidebar__section-chevron
+           .sidebar__section-list
+             a.sidebar__item > img.sidebar__community-avatar + .sidebar__item-label
+         .sidebar__footer (opt)
+   ========================================================================== */
+
+/* ==========================================================================
+   Main layout shell
+   ========================================================================== */
+.main-layout {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.main-layout__body {
+  display: flex;
+  padding-top: var(--navbar-height); /* navbar is fixed */
+}
+
+.main-layout__content {
+  flex: 1;
+  min-width: 0; /* lets long content shrink instead of overflowing */
+  padding: var(--space-4) var(--space-6);
+}
+
+.main-layout__overlay {
+  display: none;
+}
+
+/* Feed + right rail (used by Home, Community, Post pages) */
+.page-grid {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.page-grid__main {
+  flex: 1;
+  min-width: 0;
+  max-width: var(--feed-max-width);
+}
+
+.page-grid__aside {
+  position: sticky;
+  top: calc(var(--navbar-height) + var(--space-4));
+  flex: 0 0 var(--right-rail-width);
+  width: var(--right-rail-width);
+  max-height: calc(100vh - var(--navbar-height) - var(--space-8));
+  overflow-y: auto;
+  background-color: var(--color-surface-weak);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+/* ==========================================================================
+   Navbar
+   ========================================================================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-navbar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: var(--navbar-height);
+  padding: 0 var(--space-4);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ----- Left: hamburger + logo ----- */
+.navbar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+}
+
+.navbar__menu-btn {
+  display: none; /* visible below 1200px */
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height);
+  height: var(--control-height);
+  border-radius: var(--radius-circle);
+  color: var(--color-text);
+  transition: background-color var(--transition-fast);
+}
+.navbar__menu-btn:hover { background-color: var(--color-hover); }
+.navbar__menu-btn svg { width: 20px; height: 20px; }
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-height);
+  padding-right: var(--space-2);
+}
+
+.navbar__logo-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--color-brand);
+  flex-shrink: 0;
+}
+
+.navbar__logo-text {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.03em;
+  color: var(--color-logo-text);
+}
+
+/* ----- Center: search ----- */
+.navbar__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  max-width: var(--search-max-width);
+  height: var(--control-height);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  gap: var(--space-2);
+  background-color: var(--color-surface-input);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+.navbar__search:hover { background-color: var(--color-hover); }
+.navbar__search:focus-within {
+  background-color: var(--color-surface);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.navbar__search-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-secondary);
+}
+
+.navbar__search-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+.navbar__search-input::placeholder { color: var(--color-text-secondary); }
+
+/* Search results dropdown (optional) — place inside .navbar__search */
+.navbar__search-results {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  right: 0;
+  z-index: var(--z-dropdown);
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+  background-color: var(--color-surface-raised);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ----- Right: actions ----- */
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+}
+
+.navbar__search-toggle {
+  display: none; /* visible below 768px */
+}
+
+.navbar__icon-btn,
+.navbar__search-toggle {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  height: var(--control-height);
+  min-width: var(--control-height);
+  padding: 0 var(--space-2);
+  gap: var(--space-2);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color var(--transition-fast);
+}
+.navbar__icon-btn { display: inline-flex; }
+.navbar__icon-btn:hover,
+.navbar__search-toggle:hover { background-color: var(--color-hover); }
+.navbar__icon-btn svg,
+.navbar__search-toggle svg { width: 20px; height: 20px; }
+
+/* "Create" button with icon + text: add a <span> label inside .navbar__icon-btn */
+
+.navbar__badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-brand);
+  color: var(--color-text-on-brand);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  line-height: 16px;
+  text-align: center;
+}
+
+.navbar__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--control-height);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  transition: background-color var(--transition-fast);
+}
+
+.navbar__btn--primary {
+  background-color: var(--color-brand-strong);
+  color: var(--color-text-on-brand);
+}
+.navbar__btn--primary:hover { background-color: var(--color-brand-strong-hover); }
+
+.navbar__btn--secondary {
+  background-color: var(--color-secondary-btn);
+  color: var(--color-text);
+}
+.navbar__btn--secondary:hover { background-color: var(--color-secondary-btn-hover); }
+
+/* ----- User menu ----- */
+.navbar__user {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-height);
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--transition-fast);
+}
+.navbar__user:hover { background-color: var(--color-hover); }
+
+.navbar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-circle);
+  object-fit: cover;
+  background-color: var(--color-surface-input);
+}
+
+.navbar__user-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.navbar__dropdown {
+  position: absolute;
+  top: calc(var(--navbar-height) - var(--space-2));
+  right: var(--space-4);
+  z-index: var(--z-dropdown);
+  min-width: 256px;
+  padding: var(--space-2) 0;
+  background-color: var(--color-surface-raised);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ==========================================================================
+   Sidebar (left nav)
+   ========================================================================== */
+.sidebar {
+  position: sticky;
+  top: var(--navbar-height);
+  z-index: var(--z-sidebar);
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--navbar-height));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  /* Reddit hides the scrollbar until hover */
+  scrollbar-color: transparent transparent;
+}
+.sidebar:hover { scrollbar-color: var(--color-border-strong) transparent; }
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  text-align: left;
+  transition: background-color var(--transition-fast);
+}
+.sidebar__item:hover { background-color: var(--color-hover); }
+
+.sidebar__item--active,
+.sidebar__item--active:hover {
+  background-color: var(--color-active);
+  font-weight: var(--font-weight-medium);
+}
+
+.sidebar__item-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--color-text);
+}
+
+.sidebar__item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__community-avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-circle);
+  object-fit: cover;
+  background-color: var(--color-surface-input);
+}
+
+/* Community items are slightly shorter icons-wise, keep row height */
+.sidebar__section-list .sidebar__item {
+  padding-top: var(--space-1);
+  padding-bottom: var(--space-1);
+}
+
+.sidebar__divider {
+  height: 1px;
+  margin: var(--space-3) var(--space-4);
+  border: none;
+  background-color: var(--color-border);
+}
+
+/* ----- Collapsible sections (RECENT, COMMUNITIES, RESOURCES) ----- */
+.sidebar__section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+.sidebar__section-header:hover { background-color: var(--color-hover); }
+
+.sidebar__section-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.sidebar__section-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text);
+  transition: transform var(--transition-base);
+}
+
+.sidebar__section--collapsed .sidebar__section-chevron {
+  transform: rotate(-180deg);
+}
+
+.sidebar__section-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar__section--collapsed .sidebar__section-list {
+  display: none;
+}
+
+.sidebar__footer {
+  padding: var(--space-4);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+.sidebar__footer a:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+/* < 1200px: left sidebar becomes an off-canvas drawer, hamburger appears */
+@media (max-width: 1199px) {
+  .navbar__menu-btn { display: inline-flex; }
+
+  .sidebar {
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    bottom: 0;
+    z-index: var(--z-drawer);
+    height: auto;
+    transform: translateX(-100%);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    visibility: hidden;
+  }
+
+  .sidebar--open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+    visibility: visible;
+  }
+
+  .main-layout__overlay--visible {
+    display: block;
+    position: fixed;
+    inset: var(--navbar-height) 0 0 0;
+    z-index: var(--z-overlay);
+    background-color: var(--color-overlay);
+  }
+}
+
+/* < 960px: hide the right rail, feed takes full width */
+@media (max-width: 959px) {
+  .page-grid__aside { display: none; }
+  .page-grid__main { max-width: none; }
+  .main-layout__content { padding: var(--space-4); }
+}
+
+/* < 768px: search collapses to an icon, hide text labels & secondary buttons */
+@media (max-width: 767px) {
+  .navbar { gap: var(--space-2); padding: 0 var(--space-2); }
+
+  .navbar__logo-text { display: none; }
+
+  .navbar__search { display: none; }
+  .navbar__search-toggle { display: inline-flex; }
+
+  /* When the magnifier is tapped, add .navbar--search-open to .navbar */
+  .navbar--search-open .navbar__search {
+    display: flex;
+    position: absolute;
+    inset: var(--space-2) var(--space-2);
+    max-width: none;
+    height: auto;
+    z-index: 1;
+  }
+
+  .navbar__btn--secondary,
+  .navbar__user-name,
+  .navbar__icon-btn span { display: none; }
+
+  .main-layout__content { padding: var(--space-2); }
+
+  .sidebar { width: min(var(--sidebar-width), 85vw); }
+}
