@@ -1,49 +1,90 @@
 
+import { useState } from "react";
 import {
   House,
   Users,
-  PlusCircle
+  PlusCircle,
+  Hash,
+  ChevronDown
 } from "lucide-react";
 
 export default function Sidebar({
   communities = [],
+  isOpen = false,
   onNavigate
 }) {
+  const [communitiesOpen, setCommunitiesOpen] = useState(true);
+
   return (
-    <nav className="sidebar-navigation">
-      <a href="/" className="sidebar-link"
-         onClick={onNavigate}>
-        <House size={20} />
-        Home
-      </a>
+    <aside className={`sidebar ${isOpen ? "sidebar--open" : ""}`}>
+      <nav className="sidebar__nav" aria-label="Main navigation">
 
-      <a href="/communities" className="sidebar-link"
-         onClick={onNavigate}>
-        <Users size={20} />
-        Communities
-      </a>
-
-      <hr />
-
-      <p className="sidebar-heading">YOUR COMMUNITIES</p>
-
-      {communities.map((community) => (
+        {/* Home */}
         <a
-          key={community.id}
-          href={`/communities/${community.id}`}
-          className="sidebar-link"
+          href="/"
+          className="sidebar__item sidebar__item--active"
           onClick={onNavigate}
         >
-          r/{community.name}
+          <House className="sidebar__item-icon" />
+          <span className="sidebar__item-label">Home</span>
         </a>
-      ))}
 
-      <a href="/communities/create"
-         className="sidebar-link"
-         onClick={onNavigate}>
-        <PlusCircle size={20} />
-        Create Community
-      </a>
-    </nav>
+        {/* Communities */}
+        <a
+          href="/communities"
+          className="sidebar__item"
+          onClick={onNavigate}
+        >
+          <Users className="sidebar__item-icon" />
+          <span className="sidebar__item-label">Communities</span>
+        </a>
+
+        <hr className="sidebar__divider" />
+
+        {/* Your Communities */}
+        <section className={`sidebar__section ${communitiesOpen ? "" : "sidebar__section--collapsed"}`}>
+
+          <button
+            type="button"
+            className="sidebar__section-header"
+            onClick={() => setCommunitiesOpen(!communitiesOpen)}
+            aria-expanded={communitiesOpen}
+          >
+            <span className="sidebar__section-title">
+              Your Communities
+            </span>
+
+            <ChevronDown className="sidebar__section-chevron" />
+          </button>
+
+          <div className="sidebar__section-list">
+            <a
+              href="/communities/create"
+              className="sidebar__item"
+              onClick={onNavigate}
+            >
+              <PlusCircle className="sidebar__item-icon" />
+              <span className="sidebar__item-label">
+                Create Community
+              </span>
+            </a>
+
+            {communities.map((community) => (
+              <a
+                key={community.id}
+                href={`/communities/${community.id}`}
+                className="sidebar__item"
+                onClick={onNavigate}
+              >
+                <Hash className="sidebar__item-icon" />
+                <span className="sidebar__item-label">
+                  r/{community.name}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      </nav>
+    </aside>
   );
 }

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
@@ -7,46 +8,45 @@ export default function MainLayout({
   rightSidebar,
   communities = []
 }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <>
+    <div className="main-layout">
       <Navbar
-        onMenuClick={() => setMenuOpen(!menuOpen)}
+        onMenuClick={() => setSidebarOpen(!sidebarOpen)}
       />
 
-      <div className="app-shell">
-        <aside className={
-          `left-sidebar ${menuOpen ? "open" : ""}`
-        }>
-          <Sidebar
-            communities={communities}
-            onNavigate={() => setMenuOpen(false)}
-          />
-        </aside>
+      <div className="main-layout__body">
+        <Sidebar
+          communities={communities}
+          isOpen={sidebarOpen}
+          onNavigate={() => setSidebarOpen(false)}
+        />
 
-        {menuOpen && (
+        {/* Overlay for mobile sidebar */}
+        {sidebarOpen && (
           <button
-            className="sidebar-overlay"
-            onClick={() => setMenuOpen(false)}
-            aria-label="Close menu"
+            type="button"
+            className="main-layout__overlay main-layout__overlay--visible"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
           />
         )}
 
-        <div className={
-          `content-layout ${rightSidebar ? "with-right" : ""}`
-        }>
-          <main className="main-content">
-            {children}
-          </main>
+        <main className="main-layout__content">
+          <div className="page-grid">
+            <div className="page-grid__main">
+              {children}
+            </div>
 
-          {rightSidebar && (
-            <aside className="right-sidebar">
-              {rightSidebar}
-            </aside>
-          )}
-        </div>
+            {rightSidebar && (
+              <aside className="page-grid__aside">
+                {rightSidebar}
+              </aside>
+            )}
+          </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 }
