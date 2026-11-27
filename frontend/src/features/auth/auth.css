@@ -1,0 +1,149 @@
+/* ==========================================================================
+   auth.css — Log In / Sign Up popups (Reddit style)
+   Colors use the theme variables when they exist (dark mode works),
+   with normal values as a fallback if variables.css isn't loaded.
+   ========================================================================== */
+
+/* Dark background covering the whole page */
+.auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background-color: var(--color-overlay, rgba(0, 0, 0, 0.5));
+}
+
+/* The white box */
+.auth-modal {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  padding: 40px 32px 24px;
+  background-color: var(--color-surface-raised, #ffffff);
+  color: var(--color-text, #0f1a1c);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  font-family: var(--font-sans, "Reddit Sans", -apple-system, "Segoe UI", Roboto, Arial, sans-serif);
+}
+
+/* Round X button, top-right */
+.auth-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-secondary-btn, #e5ebee);
+  color: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.auth-close:hover { background-color: var(--color-secondary-btn-hover, #d2dadd); }
+
+.auth-title {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.auth-legal {
+  margin: 0 0 24px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.auth-label {
+  padding-left: 16px;
+  font-size: 12px;
+  color: var(--color-text-secondary, #576f76);
+}
+.auth-required { color: var(--color-danger, #d93a00); }
+
+/* Rounded grey input, like Reddit */
+.auth-input {
+  height: 48px;
+  padding: 0 16px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background-color: var(--color-surface-input, #e5ebee);
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 120ms, background-color 120ms;
+}
+.auth-input:hover { background-color: var(--color-hover, #e2e7e9); }
+.auth-input:focus { border-color: var(--color-focus, #0045ac); }
+.auth-input--error { border-color: var(--color-danger, #d93a00); }
+
+.auth-error {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 12px;
+  color: var(--color-danger, #d93a00);
+}
+
+.auth-switch {
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+
+.auth-link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-link, #0045ac);
+  font: inherit;
+  cursor: pointer;
+}
+.auth-link:hover { text-decoration: underline; }
+
+/* Big orange button */
+.auth-submit {
+  height: 48px;
+  margin-top: 16px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--color-brand-strong, #d93900);
+  color: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 120ms;
+}
+.auth-submit:hover:not(:disabled) { background-color: var(--color-brand-strong-hover, #ae2c00); }
+
+/* Grey until the form is filled, like Reddit */
+.auth-submit:disabled {
+  background-color: var(--color-secondary-btn, #e5ebee);
+  color: var(--color-text-weak, #8ba2ad);
+  cursor: not-allowed;
+}
+
+/* Full screen on phones */
+@media (max-width: 767px) {
+  .auth-backdrop { padding: 0; }
+  .auth-modal { max-width: none; height: 100%; max-height: none; border-radius: 0; }
+}
